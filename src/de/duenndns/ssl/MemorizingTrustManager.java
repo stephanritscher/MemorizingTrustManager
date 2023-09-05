@@ -619,8 +619,11 @@ public class MemorizingTrustManager implements X509TrustManager {
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	void startActivityNotification(Intent intent, int decisionId, String certName) {
 		Notification notification;
-		final PendingIntent call = PendingIntent.getActivity(master, 0, intent,
-				0);
+		int flags = 0;
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+			flags |= PendingIntent.FLAG_MUTABLE;
+		}
+		final PendingIntent call = PendingIntent.getActivity(master, 0, intent, flags);
 		final String mtmNotification = master.getString(R.string.mtm_notification);
 		final long currentMillis = System.currentTimeMillis();
 		final Context context = master.getApplicationContext();
